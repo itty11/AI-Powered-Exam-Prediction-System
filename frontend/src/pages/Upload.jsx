@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 const API = "http://localhost:5000/api";
 
@@ -552,6 +552,7 @@ const PIPELINE_STEPS = [
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Upload({ token, user, onLogout, onDone }) {
   const [files,    setFiles]    = useState([]);
+  useEffect(() => { document.title = "Upload Papers — Exam PredictorAI"; }, []);
   const [dragover, setDragover] = useState(false);
   const [error,    setError]    = useState("");
   const [loading,  setLoading]  = useState(false);
@@ -773,8 +774,17 @@ export default function Upload({ token, user, onLogout, onDone }) {
 
           {/* error */}
           {error && (
-            <div className="banner error">✕ {error}</div>
+            <div className="banner error">⚠ Minimum 3 PDFs required. Please add {3 - files.length} more file{3 - files.length > 1 ? "s" : ""}.</div>
           )}
+          {files.length > 5 && (
+            <div className="banner error">
+              ⚠ Maximum 5 PDFs allowed. Please remove {files.length - 5} file{files.length - 5 > 1 ? "s" : ""}.
+              </div>
+            )}
+            {/* general error */}
+            {error && (
+              <div className="banner error">✕ {error}</div>
+              )}
 
           {/* actions */}
           <div className="actions">
@@ -788,10 +798,17 @@ export default function Upload({ token, user, onLogout, onDone }) {
               disabled={!isValid || loading}
               onClick={handleSubmit}
             >
-              {loading
-                ? <><span className="spinner" />Analysing…</>
-                : `Analyse ${files.length > 0 ? files.length : ""} Papers →`
-              }
+              {loading 
+                ? ( <><span className="spinner" />Analysing…</>
+                ) : files.length === 0 ? (
+                  "Upload PDFs to Continue"
+                ) : files.length < 3 ? (
+                  `Add ${3 - files.length} More PDF${3 - files.length > 1 ? "s" : ""} to Continue`
+                ) : files.length > 5 ? (
+                  "Too Many Files — Remove Some"
+                ) : (
+                  `Analyse ${files.length} Papers →`
+                  )}
             </button>
           </div>
 

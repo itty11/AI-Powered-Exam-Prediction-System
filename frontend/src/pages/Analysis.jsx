@@ -548,7 +548,8 @@ function progressToStep(pct) {
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Analysis({ token, user, sessionId, onDone, onError }) {
   const [progress,   setProgress]   = useState(0);
-  const [status,     setStatus]     = useState("processing"); // processing | done | failed
+  useEffect(() => { document.title = "Analysing — Exam PredictorAI"; }, []);
+  const [status,     setStatus]     = useState("processing"); 
   const [errorMsg,   setErrorMsg]   = useState("");
   const [elapsed,    setElapsed]    = useState(0);
   const [factIndex,  setFactIndex]  = useState(0);
@@ -587,10 +588,13 @@ export default function Analysis({ token, user, sessionId, onDone, onError }) {
 
       if (data.status === "done") {
         clearInterval(pollRef.current);
+        clearInterval(timerRef.current);
+        clearInterval(factRef.current);
         setProgress(100);
         setStatus("done");
       } else if (data.status === "failed") {
         clearInterval(pollRef.current);
+        clearInterval(timerRef.current);
         setStatus("failed");
         setErrorMsg("Analysis failed on the server. Please try again.");
       } else {
@@ -754,7 +758,7 @@ export default function Analysis({ token, user, sessionId, onDone, onError }) {
               <span className="done-icon">✅</span>
               <div className="done-title">Paper Ready!</div>
               <div className="done-sub">
-                Completed in {formatElapsed(elapsed)} — click below to view results
+                Analysis completed in {formatElapsed(elapsed)} — click below to view results
               </div>
               <button className="view-btn" onClick={() => onDone && onDone(sessionId)}>
                 View Results &amp; Download →

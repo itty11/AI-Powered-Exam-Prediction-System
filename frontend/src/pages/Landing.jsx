@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -205,6 +205,7 @@ const styles = `
 `;
 
 export default function Landing({ onLogin, onSignup }) {
+  useEffect(() => { document.title = "Exam PredictorAI"; }, []);
   return (
     <>
       <style>{styles}</style>

@@ -9,20 +9,12 @@ from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer,
     Table, TableStyle, HRFlowable, KeepTogether
 )
-from reportlab.platypus.flowables import HRFlowable
-
-
-# ── Output folder ────────────────────────────────────────────────────────────
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "outputs")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
-# ── Styles ────────────────────────────────────────────────────────────────────
-
 def build_styles():
-    base = getSampleStyleSheet()
-
     styles = {
         "college": ParagraphStyle(
             "college",
@@ -30,6 +22,7 @@ def build_styles():
             fontName="Helvetica-Bold",
             alignment=TA_CENTER,
             spaceAfter=2,
+            textColor=colors.black,
         ),
         "exam_title": ParagraphStyle(
             "exam_title",
@@ -37,6 +30,7 @@ def build_styles():
             fontName="Helvetica-Bold",
             alignment=TA_CENTER,
             spaceAfter=2,
+            textColor=colors.black,
         ),
         "meta": ParagraphStyle(
             "meta",
@@ -44,6 +38,7 @@ def build_styles():
             fontName="Helvetica",
             alignment=TA_CENTER,
             spaceAfter=4,
+            textColor=colors.black,
         ),
         "section_header": ParagraphStyle(
             "section_header",
@@ -52,8 +47,7 @@ def build_styles():
             alignment=TA_CENTER,
             spaceBefore=10,
             spaceAfter=4,
-            textColor=colors.white,
-            backColor=colors.HexColor("#2c3e50"),
+            textColor=colors.black,
             borderPadding=(4, 8, 4, 8),
         ),
         "instructions": ParagraphStyle(
@@ -61,7 +55,7 @@ def build_styles():
             fontSize=8.5,
             fontName="Helvetica-Oblique",
             alignment=TA_CENTER,
-            textColor=colors.HexColor("#555555"),
+            textColor=colors.black,
             spaceAfter=6,
         ),
         "question": ParagraphStyle(
@@ -72,20 +66,19 @@ def build_styles():
             spaceBefore=4,
             spaceAfter=4,
             leftIndent=18,
-            firstLineIndent=-18,    # hanging indent for question number
+            firstLineIndent=-18,
+            textColor=colors.black,
         ),
         "footer": ParagraphStyle(
             "footer",
             fontSize=8,
             fontName="Helvetica-Oblique",
             alignment=TA_CENTER,
-            textColor=colors.grey,
+            textColor=colors.black,
         ),
     }
     return styles
 
-
-# ── Header table (college info box) ──────────────────────────────────────────
 
 def build_header(styles, metadata: dict) -> Table:
     subject  = metadata.get("subject", "Subject")
@@ -94,8 +87,16 @@ def build_header(styles, metadata: dict) -> Table:
     duration = metadata.get("duration", "3 Hours")
     year     = datetime.now().year
 
+    college_style = ParagraphStyle(
+        "college_plain",
+        fontSize=13,
+        fontName="Helvetica-Bold",
+        alignment=TA_CENTER,
+        textColor=colors.black,
+    )
+
     header_data = [
-        [Paragraph("AI Exam Question Paper Prediction System", styles["college"])],
+        [Paragraph("EXAM PREDICTOR AI", college_style)],
         [Paragraph(f"{subject} — {exam} {year}", styles["exam_title"])],
         [Paragraph(
             f"Time Allowed: {duration}&nbsp;&nbsp;|&nbsp;&nbsp;"
@@ -107,51 +108,64 @@ def build_header(styles, metadata: dict) -> Table:
 
     table = Table(header_data, colWidths=[19 * cm])
     table.setStyle(TableStyle([
-        ("BOX",        (0, 0), (-1, -1), 1,   colors.HexColor("#2c3e50")),
-        ("LINEBELOW",  (0, 0), (-1, -2), 0.5, colors.HexColor("#aaaaaa")),
-        ("BACKGROUND", (0, 0), (-1, 0),       colors.HexColor("#2c3e50")),
+        ("BOX",           (0, 0), (-1, -1), 1,   colors.black),
+        ("LINEBELOW",     (0, 0), (-1, -2), 0.5, colors.black),
+        ("BACKGROUND",    (0, 0), (-1, 0),       colors.white),
         ("TOPPADDING",    (0, 0), (-1, -1), 6),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
         ("LEFTPADDING",   (0, 0), (-1, -1), 10),
         ("RIGHTPADDING",  (0, 0), (-1, -1), 10),
     ]))
 
-    # make college name white text on dark background
-    header_data[0][0].style = ParagraphStyle(
-        "college_white",
-        fontSize=13,
-        fontName="Helvetica-Bold",
-        alignment=TA_CENTER,
-        textColor=colors.white,
-    )
-
     return table
 
 
-# ── Questions ─────────────────────────────────────────────────────────────────
-
 def build_section(section: dict, styles: dict) -> list:
-    """Build flowables for one section (Part A / B / C)."""
     flowables = []
 
-    # section header bar
     flowables.append(Spacer(1, 0.3 * cm))
-    flowables.append(Paragraph(section["name"], styles["section_header"]))
+
+    # plain black section header bar
+    section_style = ParagraphStyle(
+        "section_plain",
+        fontSize=10,
+        fontName="Helvetica-Bold",
+        alignment=TA_CENTER,
+        spaceBefore=6,
+        spaceAfter=4,
+        textColor=colors.black,
+        borderPadding=(4, 8, 4, 8),
+    )
+
+    section_table = Table(
+        [[Paragraph(section["name"], section_style)]],
+        colWidths=[19 * cm]
+    )
+    section_table.setStyle(TableStyle([
+        ("BOX",           (0, 0), (-1, -1), 0.8, colors.black),
+        ("BACKGROUND",    (0, 0), (-1, -1),      colors.white),
+        ("TOPPADDING",    (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    flowables.append(section_table)
     flowables.append(Paragraph(section["instructions"], styles["instructions"]))
 
     questions = section.get("questions", [])
-
     for q in questions:
-        no   = q.get("no", "")
-        text = q.get("question", "")
+        no    = q.get("no", "")
+        text  = q.get("question", "")
         marks = q.get("marks", "")
 
-        # right-align marks, question text left — use a two-column mini table
-        q_para  = Paragraph(f"{no}.&nbsp;&nbsp;{text}", styles["question"])
-        m_para  = Paragraph(
+        q_para = Paragraph(f"{no}.&nbsp;&nbsp;{text}", styles["question"])
+        m_para = Paragraph(
             f"<b>[{marks} M]</b>",
-            ParagraphStyle("marks", fontSize=9, fontName="Helvetica-Bold",
-                           alignment=TA_CENTER, textColor=colors.HexColor("#2c3e50"))
+            ParagraphStyle(
+                "marks",
+                fontSize=9,
+                fontName="Helvetica-Bold",
+                alignment=TA_CENTER,
+                textColor=colors.black,
+            )
         )
 
         row = Table(
@@ -160,52 +174,41 @@ def build_section(section: dict, styles: dict) -> list:
         )
         row.setStyle(TableStyle([
             ("VALIGN",        (0, 0), (-1, -1), "TOP"),
-            ("LINEBELOW",     (0, 0), (-1, -1), 0.3, colors.HexColor("#dddddd")),
+            ("LINEBELOW",     (0, 0), (-1, -1), 0.3, colors.black),
             ("TOPPADDING",    (0, 0), (-1, -1), 4),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
             ("LEFTPADDING",   (0, 0), (0, -1),  0),
             ("RIGHTPADDING",  (-1, 0), (-1, -1), 0),
         ]))
 
-        # KeepTogether prevents a question splitting across pages
         flowables.append(KeepTogether(row))
 
     return flowables
 
 
-# ── Footer ────────────────────────────────────────────────────────────────────
-
 def on_page(canvas, doc, styles):
-    """Drawn on every page — page number + watermark."""
     canvas.saveState()
 
     # page number
     page_num = canvas.getPageNumber()
     canvas.setFont("Helvetica", 8)
-    canvas.setFillColor(colors.grey)
+    canvas.setFillColor(colors.black)
     canvas.drawCentredString(
         A4[0] / 2, 1.5 * cm,
         f"Page {page_num}  |  AI-Generated Predicted Paper  |  For Practice Only"
     )
 
-    # light watermark
+    # simple light grey watermark
     canvas.setFont("Helvetica-Bold", 55)
-    canvas.setFillColor(colors.HexColor("#f0f0f0"))
-    canvas.setFillAlpha(0.3)
+    canvas.setFillGray(0.88)
     canvas.translate(A4[0] / 2, A4[1] / 2)
     canvas.rotate(45)
     canvas.drawCentredString(0, 0, "PREDICTED")
+
     canvas.restoreState()
 
 
-# ── Main entry point ──────────────────────────────────────────────────────────
-
 def generate_pdf(paper: dict, session_id: int) -> str:
-    """
-    paper      : the dict returned by ai_predictor.predict_questions()
-    session_id : used to name the output file uniquely
-    returns    : absolute path to the generated PDF
-    """
     filename = f"predicted_paper_{session_id}.pdf"
     filepath = os.path.join(OUTPUT_DIR, filename)
 
@@ -221,41 +224,42 @@ def generate_pdf(paper: dict, session_id: int) -> str:
     styles   = build_styles()
     metadata = paper.get("metadata", {})
     sections = paper.get("sections", [])
+    story    = []
 
-    story = []
-
-    # 1 — header
+    # header
     story.append(build_header(styles, metadata))
     story.append(Spacer(1, 0.4 * cm))
 
-    # 2 — general instructions box
-    general = (
+    # general instructions
+    story.append(Paragraph(
         "<b>General Instructions:</b> Read all questions carefully. "
         "Write answers in the space provided. "
-        "This is an AI-predicted paper for practice purposes only."
-    )
-    story.append(Paragraph(general, ParagraphStyle(
-        "general_inst",
-        fontSize=8.5,
-        fontName="Helvetica",
-        backColor=colors.HexColor("#fef9e7"),
-        borderColor=colors.HexColor("#f0c040"),
-        borderWidth=0.5,
-        borderPadding=(5, 8, 5, 8),
-        spaceAfter=6,
-    )))
+        "This is an AI-predicted paper for practice purposes only.",
+        ParagraphStyle(
+            "general_inst",
+            fontSize=8.5,
+            fontName="Helvetica",
+            borderColor=colors.black,
+            borderWidth=0.5,
+            borderPadding=(5, 8, 5, 8),
+            spaceAfter=6,
+            textColor=colors.black,
+        )
+    ))
 
-    # 3 — sections
+    # sections
     for section in sections:
         story.extend(build_section(section, styles))
 
-    # 4 — end rule
+    # end rule
     story.append(Spacer(1, 0.5 * cm))
-    story.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#2c3e50")))
+    story.append(HRFlowable(width="100%", thickness=1, color=colors.black))
     story.append(Spacer(1, 0.2 * cm))
-    story.append(Paragraph("★ ★ ★ END OF QUESTION PAPER ★ ★ ★", styles["footer"]))
+    story.append(Paragraph(
+        "* * * END OF QUESTION PAPER * * *",
+        styles["footer"]
+    ))
 
-    # build
     doc.build(
         story,
         onFirstPage=lambda c, d: on_page(c, d, styles),

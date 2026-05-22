@@ -547,11 +547,12 @@ const styles = `
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Result({ token, user, sessionId, onLogout, onNewSession }) {
-  const [data,        setData]        = useState(null);   // session data from API
+  const [data,        setData]        = useState(null);   
+  useEffect(() => { document.title = "Results — Exam PredictorAI"; }, []);
   const [loading,     setLoading]     = useState(true);
   const [error,       setError]       = useState("");
   const [downloading, setDownloading] = useState(false);
-  const [showAll,     setShowAll]     = useState(false);  // show all repeated Qs
+  const [showAll,     setShowAll]     = useState(false);  
   const [toast,       setToast]       = useState("");
 
   // ── Fetch session on mount ─────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const API = "http://localhost:5000/api";
 
@@ -341,7 +341,8 @@ function getStrength(pw) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Login({ onLogin }) {
-  const [tab,     setTab]     = useState("login");   // "login" | "signup"
+  const [tab,     setTab]     = useState("login");   
+  useEffect(() => { document.title = "Login — Exam PredictorAI"; }, []);
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState("");
   const [success, setSuccess] = useState("");
