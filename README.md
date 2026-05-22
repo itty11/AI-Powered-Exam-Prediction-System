@@ -98,7 +98,6 @@ exam-predictorAI/
 - Python 3.10+
 - Node.js 18+
 - Groq API key (free at [console.groq.com](https://console.groq.com))
-- HuggingFace token (free at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens))
 
 ---
 
@@ -155,14 +154,12 @@ Create `backend/.env` from the template:
 GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
 JWT_SECRET_KEY=your-long-random-secret-key
 DATABASE_URL=sqlite:///exam_predictor.db
-HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 | Variable | Where to get it |
 |---|---|
 | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) → API Keys |
 | `JWT_SECRET_KEY` | Any long random string |
-| `HF_TOKEN` | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
 
 ---
 
