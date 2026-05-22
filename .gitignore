@@ -1,0 +1,22 @@
+# backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/instance/
+backend/uploads/
+backend/outputs/
+backend/.env
+backend/test.py
+backend/ai_p.py
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+
+# test_data
+test_data/data_structures_2022.docx
+
+# misc
+*.pyc
+.DS_Store
+Recording Project.mp4
