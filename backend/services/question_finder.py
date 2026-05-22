@@ -2,6 +2,8 @@ import re
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import os
+os.environ["HUGGINGFACE_TOKEN"] = os.environ.get("HF_TOKEN", "")
 
 # loads once, cached after first download (~90MB)
 model = SentenceTransformer('all-MiniLM-L6-v2')

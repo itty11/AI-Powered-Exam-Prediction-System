@@ -1,5 +1,6 @@
 # Exam PredictorAI — AI-Powered Exam Question Predictor
 
+
 An intelligent web application that analyses past exam papers and generates predicted question papers using AI. Upload 3–5 previous exam PDFs, let the system find repeated patterns, and download a formatted predicted paper instantly.
 
 ---
@@ -59,7 +60,7 @@ Storage
 ## Project Structure
 
 ```
-exam-predictorAI/
+exam-oracle/
 ├── backend/
 │   ├── app.py                  # Flask app factory
 │   ├── models.py               # SQLAlchemy models
@@ -98,6 +99,7 @@ exam-predictorAI/
 - Python 3.10+
 - Node.js 18+
 - Groq API key (free at [console.groq.com](https://console.groq.com))
+- HuggingFace token (free at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens))
 
 ---
 
@@ -154,12 +156,14 @@ Create `backend/.env` from the template:
 GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
 JWT_SECRET_KEY=your-long-random-secret-key
 DATABASE_URL=sqlite:///exam_predictor.db
+HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 | Variable | Where to get it |
 |---|---|
 | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) → API Keys |
 | `JWT_SECRET_KEY` | Any long random string |
+| `HF_TOKEN` | [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) |
 
 ---
 
@@ -269,6 +273,9 @@ vite, @vitejs/plugin-react
 
 ---
 
+## License
+
+MIT License — free to use, modify, and distribute.
 
 ---
 

@@ -11,6 +11,8 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from models import db
 
+os.environ["HUGGINGFACE_TOKEN"] = os.environ.get("HF_TOKEN", "")
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 
 def create_app():
     app = Flask(__name__)
