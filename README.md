@@ -269,9 +269,6 @@ vite, @vitejs/plugin-react
 
 ---
 
-## License
-
-MIT License — free to use, modify, and distribute.
 
 ---
 
