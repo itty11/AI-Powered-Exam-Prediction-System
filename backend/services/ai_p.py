@@ -1,6 +1,8 @@
 import os
 import json
 
+from sentence_transformers import SentenceTransformer
+
 def predict_questions(extracted_texts: list[str], repeated_questions: list[dict]) -> dict:
     """Mock response — swap for real API once network works."""
 
@@ -200,3 +202,11 @@ def find_repeated(
     repeated.sort(key=lambda x: x["count"], reverse=True)
 
     return repeated
+
+    ---------------------------------------------------
+    # question_finder.py code for reference - line 9
+    # loads once, cached after first download (~90MB)
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+
+    # ai_predictor.py code for reference - line 119
+    "model": "llama-3.1-8b-instant"
