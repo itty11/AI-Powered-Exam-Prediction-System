@@ -116,7 +116,7 @@ def predict_questions(extracted_texts: list[str], repeated_questions: list[dict]
     print(f"[DEBUG] Total prompt length: {len(prompt)}")
 
     payload = {
-        "model": "llama-3.1-8b-instant",
+        "model": "llama-3.3-70b-versatile",
         "messages": [
             {
                 "role":    "system",

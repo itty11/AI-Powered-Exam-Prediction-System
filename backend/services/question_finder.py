@@ -6,7 +6,7 @@ import os
 os.environ["HUGGINGFACE_TOKEN"] = os.environ.get("HF_TOKEN", "")
 
 # loads once, cached after first download (~90MB)
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('all-mpnet-base-v2')
 
 
 def extract_questions(text: str) -> list[str]:
