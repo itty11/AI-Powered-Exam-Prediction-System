@@ -447,6 +447,112 @@ const styles = `
     white-space: nowrap;
   }
 
+/* ── Difficulty badges ── */
+  .diff-badge {
+    flex-shrink: 0;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .diff-easy {
+    background: #edfbf3;
+    border-color: #b7e5c8;
+    color: #27ae60;
+  }
+
+  .diff-medium {
+    background: rgba(201,168,76,0.10);
+    border-color: var(--gold-light);
+    color: #a07c20;
+  }
+
+  .diff-hard {
+    background: #fdf0ef;
+    border-color: #e8c0bc;
+    color: #c0392b;
+  }
+
+  /* ── Topic chart ── */
+  .chart-body { padding: 1.5rem 2rem; }
+
+  .chart-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 1rem;
+  }
+
+  .chart-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .chart-label {
+    font-size: 0.82rem;
+    color: var(--ink);
+    width: 200px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chart-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .chart-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--ink), #4a4a6a);
+    transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .chart-count {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gold);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .diff-legend {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
   /* ── Download strip ── */
   .download-strip {
     padding: 1.5rem 2rem;
@@ -770,7 +876,65 @@ export default function Result({ token, user, sessionId, onLogout, onNewSession 
             </div>
           </div>
 
-          {/* ── Card 2: Predicted Paper ── */}
+          {/* ── Card 2: Topic Frequency Chart ── */}
+          {repeatedQs.length > 0 && (
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <div className="card-title">
+                    Topic <em>Frequency</em>
+                    </div>
+                    <div className="card-sub">
+                      How many times each topic appeared across your uploaded papers
+                      </div>
+                      </div>
+                      </div>
+                      
+                      <div className="chart-body">
+                        <div className="chart-title">Questions by frequency</div>
+                        
+                        {/* bar chart */}
+                        {repeatedQs.slice(0, 8).map((q, i) => {
+                          const maxCount = repeatedQs[0]?.count || 1;
+                          const pct      = Math.round((q.count / maxCount) * 100);
+                          const label    = q.question.length > 40
+                          ? q.question.slice(0, 40) + "…"
+                          : q.question;
+                          
+                          return (
+                          <div className="chart-row" key={i}>
+                            <div className="chart-label" title={q.question}>{label}</div>
+                            <div className="chart-track">
+                              <div
+                              className="chart-fill"
+                              style={{ width: `${pct}%` }}
+                              />
+                              </div>
+                              <div className="chart-count">{q.count}×</div>
+                              </div>
+                              );
+                              })}
+                              
+                              {/* difficulty legend */}
+                              <div className="diff-legend">
+                                <div className="legend-item">
+                                  <div className="legend-dot" style={{ background: "#27ae60" }} />
+                                  Easy — short answer, definitions
+                                  </div>
+                                  <div className="legend-item">
+                                    <div className="legend-dot" style={{ background: "#c9a84c" }} />
+                                    Medium — explanation, examples
+                                    </div>
+                                    <div className="legend-item">
+                                      <div className="legend-dot" style={{ background: "#c0392b" }} />
+                                      Hard — essay, algorithm, analysis
+                                      </div>
+                                      </div>
+                                      </div>
+                                      </div>
+                                    )}
+
+          {/* ── Card 3: Predicted Paper ── */}
           <div className="card">
             <div className="card-header">
               <div>
@@ -813,6 +977,11 @@ export default function Result({ token, user, sessionId, onLogout, onNewSession 
                         <div className="q-row" key={qi}>
                           <div className="q-num">{q.no}.</div>
                           <div className="q-text">{q.question}</div>
+                          {q.difficulty && (
+                            <span className={`diff-badge diff-${q.difficulty}`}>
+                              {q.difficulty}
+                              </span>
+                            )}
                           <div className="q-marks">{q.marks} M</div>
                         </div>
                       ))}

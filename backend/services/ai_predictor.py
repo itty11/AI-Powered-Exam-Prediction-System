@@ -66,35 +66,35 @@ Generate using this exact JSON format:
       "name": "Part A – Short Answer",
       "instructions": "Answer all. 2 marks each.",
       "questions": [
-        {{"no": 1, "question": "...", "marks": 2}},
-        {{"no": 2, "question": "...", "marks": 2}},
-        {{"no": 3, "question": "...", "marks": 2}},
-        {{"no": 4, "question": "...", "marks": 2}},
-        {{"no": 5, "question": "...", "marks": 2}},
-        {{"no": 6, "question": "...", "marks": 2}},
-        {{"no": 7, "question": "...", "marks": 2}},
-        {{"no": 8, "question": "...", "marks": 2}},
-        {{"no": 9, "question": "...", "marks": 2}},
-        {{"no": 10, "question": "...", "marks": 2}}
+        {{"no": 1, "question": "...", "marks": 2, "difficulty": "easy"}},
+        {{"no": 2, "question": "...", "marks": 2, "difficulty": "easy"}},
+        {{"no": 3, "question": "...", "marks": 2, "difficulty": "easy"}},
+        {{"no": 4, "question": "...", "marks": 2, "difficulty": "medium"}},
+        {{"no": 5, "question": "...", "marks": 2, "difficulty": "medium"}},
+        {{"no": 6, "question": "...", "marks": 2, "difficulty": "medium"}},
+        {{"no": 7, "question": "...", "marks": 2, "difficulty": "medium"}},
+        {{"no": 8, "question": "...", "marks": 2, "difficulty": "hard"}},
+        {{"no": 9, "question": "...", "marks": 2, "difficulty": "hard"}},
+        {{"no": 10, "question": "...", "marks": 2, "difficulty": "hard"}}
       ]
     }},
     {{
       "name": "Part B – Medium Answer",
       "instructions": "Answer any 4. 8 marks each.",
       "questions": [
-        {{"no": 1, "question": "...", "marks": 8}},
-        {{"no": 2, "question": "...", "marks": 8}},
-        {{"no": 3, "question": "...", "marks": 8}},
-        {{"no": 4, "question": "...", "marks": 8}},
-        {{"no": 5, "question": "...", "marks": 8}}
+        {{"no": 1, "question": "...", "marks": 8, "difficulty": "medium"}},
+        {{"no": 2, "question": "...", "marks": 8, "difficulty": "medium"}},
+        {{"no": 3, "question": "...", "marks": 8, "difficulty": "medium"}},
+        {{"no": 4, "question": "...", "marks": 8, "difficulty": "hard"}},
+        {{"no": 5, "question": "...", "marks": 8, "difficulty": "hard"}}
       ]
     }},
     {{
       "name": "Part C – Essay",
       "instructions": "Answer any 1. 20 marks.",
       "questions": [
-        {{"no": 1, "question": "...", "marks": 20}},
-        {{"no": 2, "question": "...", "marks": 20}}
+        {{"no": 1, "question": "...", "marks": 20, "difficulty": "hard"}},
+        {{"no": 2, "question": "...", "marks": 20, "difficulty": "hard"}}
       ]
     }}
   ]
